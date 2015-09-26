@@ -47,14 +47,22 @@ public class Player : MonoBehaviour {
 
 				if (!fireStick.Pressed()) 
 				{
-					transform.localRotation = Quaternion.LookRotation(moveStick.GetVec3d(true, 0));
+					transform.localRotation = LookRotation(moveStick.GetVec3d(true, 0));
 				}
 			}
 
 			if (fireStick.Pressed())
 			{
-				transform.localRotation = Quaternion.LookRotation(fireStick.GetVec3d(true, 0));
+				transform.localRotation = LookRotation(fireStick.GetVec3d(true, 0));
 			}
 		}
+	}
+
+	private Quaternion LookRotation(Vector3 dir) 
+	{
+		if (dir != Vector3.zero)
+			return Quaternion.LookRotation(dir);
+
+		return Quaternion.identity;
 	}
 }

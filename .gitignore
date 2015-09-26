@@ -35,3 +35,9 @@ Thumbs.db
 # ============ #
 Examples/
 Control-Freak-Demos/
+
+# ============ #
+# High memory assets to avoid repo bloat. #
+# ============ #
+Characters/
+Assets/Characters.meta
