@@ -12,47 +12,29 @@ public class PlayerTests
 	[Category("Movement")]
 	public void IMoveComponentMoveCalledWithExpectedArgument() 
 	{	
-		var moveMock = GetMoveMock();
-		var playerController = GetPlayerControllerMock(moveMock);
+		var actionController = GetActionControllerMock();
 		
-		playerController.Move(Vector3.right, 1, 6, 3, 4);
+		var expected = new Vector3(4,0,0);
+		var actual = actionController.Move(Vector3.right, 1, 6, 3, 4);
 		
-		moveMock.Received(1).Move(new Vector3(4,0,0));
+		Assert.AreEqual(expected, actual);
 	}
-
+	
 	[Test]
 	[Category("Movement")]
 	public void IMoveComponentMoveCalledWithVectorZeroForNoMovementInput() 
 	{ 
-		var moveMock = GetMoveMock();
-		var playerController = GetPlayerControllerMock(moveMock);
+		var actionController = GetActionControllerMock();
 		
-		playerController.Move(Vector3.zero, 0, 6, 3, 4);
+		var expected = Vector3.zero;
+		var actual = actionController.Move(Vector3.zero, 0, 6, 3, 4);
 		
-		moveMock.Received(1).Move(Vector3.zero);
+		Assert.AreEqual (expected, actual);
 	}
 
-	[Test]
-	[Category("Movement")]
-	public void  FaceDirectionInputOutputsExpected() {
-		var moveMock = GetMoveMock();
-		var playerController = GetPlayerControllerMock(moveMock);
-
-		playerController.FaceDir(125, 1, 0.2f, 0, 500, 500, 0.3f);
-
-		moveMock.Received(1).FaceDir(new Quaternion(0.0f,0.0f,0.0f, 1f));
-	}
-	
-	private IMoveComponent GetMoveMock () 
+	private ActionController GetActionControllerMock () 
 	{
-		return Substitute.For<IMoveComponent> ();
-	}
-	
-	private PlayerController GetPlayerControllerMock (IMoveComponent move) 
-	{
-		
-		var playerController = Substitute.For<PlayerController>();
-		playerController.SetMoveComponent(move);
-		return playerController;
+		var actionController = Substitute.For<ActionController>();
+		return actionController;
 	}
 }

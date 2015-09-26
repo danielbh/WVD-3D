@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Player : MonoBehaviour, IMoveComponent {
+public class Player : MonoBehaviour {
 	
 	public const int STICK_MOVE	= 0;
 	public const int STICK_FIRE	= 1;
@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IMoveComponent {
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
 	
 	[HideInInspector]
-	public PlayerController playerController; // Test wrapper neccesary for making code testable
+	public ActionController actionController; // Test wrapper neccesary for making code testable
 	public TouchController	touchController; // Input controller for player actions (ex: move, fire, etc...)
 	
 	public float	runForwardSpeed		= 6,		// max speed when running forward
@@ -29,8 +29,6 @@ public class Player : MonoBehaviour, IMoveComponent {
 	public void OnEnable()
 	{
 		charaController = gameObject.GetComponent<CharacterController>();
-		playerController.SetMoveComponent(this);
-
 		moveStick	= touchController.GetStick(STICK_MOVE);
 		fireStick	= touchController.GetStick(STICK_FIRE);
 	}
@@ -39,41 +37,24 @@ public class Player : MonoBehaviour, IMoveComponent {
 	{
 		if (touchController != null)
 		{
-
 			if (moveStick.Pressed())
 			{	
 				// Use stick's normalized XZ vector and tilt to move...
-				playerController.Move(moveStick.GetVec3d(true, 0), moveStick.GetTilt(), runForwardSpeed, 
+				var worldMoveVec = actionController.Move(moveStick.GetVec3d(true, 0), moveStick.GetTilt(), runForwardSpeed, 
 				                      runBackSpeed, runSideSpeed);
+
+				charaController.Move(worldMoveVec * Time.deltaTime);
 
 				if (!fireStick.Pressed()) 
 				{
-					playerController.FaceDir(moveStick.GetAngle(), moveStick.GetTilt(), aimStickDeadZone, aimStickMinSpeed,
-					                         aimStickMaxSpeed, maxTurnSpeed, turnSmoothingTime);
+					transform.localRotation = Quaternion.LookRotation(moveStick.GetVec3d(true, 0));
 				}
 			}
 
 			if (fireStick.Pressed())
 			{
-				// Get target angle and stick's tilt to determinate turning speed.
-				playerController.FaceDir(fireStick.GetAngle(), fireStick.GetTilt(), aimStickDeadZone, aimStickMinSpeed, 
-				                         aimStickMaxSpeed, maxTurnSpeed, turnSmoothingTime);
+				transform.localRotation = Quaternion.LookRotation(fireStick.GetVec3d(true, 0));
 			}
 		}
 	}
-
-	#region IMoveComponent implementation
-
-	public void FaceDir(Quaternion rotation) {
-		transform.localRotation = rotation;
-	}
-
-	public void Move(Vector3 worldMoveVec) 
-	{
-		if (charaController != null)
-			charaController.Move(worldMoveVec * Time.deltaTime);
-	}
-
-	#endregion
-
 }
