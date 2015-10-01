@@ -28,7 +28,7 @@ public class ActionController : HumanoidController {
 			worldMoveVec = RotateVec(localDir * speed);
 			return worldMoveVec;
 	}
-	
+
 	private Vector3 RotateVec(Vector3 vec)
 	{
 		return Quaternion.Euler(0, 0, 0) * vec;

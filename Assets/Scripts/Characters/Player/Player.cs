@@ -11,21 +11,24 @@ public class Player : MonoBehaviour {
 	public	float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
 	public  float	aimStickMaxSpeed	= 500;	// aim locking speed at maximum stick tilt (degs/sec)
 
-	public Animator animator;
-
 	public	float	maxTurnSpeed		= 500;	// max turn smoothing speed 
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
+
+	public GameObject staffEnd;
 
 	public float timeBetweenAttacks= 0.2f;
 	
 	[HideInInspector]
 	public ActionController actionController; // Test wrapper neccesary for making code testable
 	public TouchController	touchController; // Input controller for player actions (ex: move, fire, etc...)
-	
+
+	public Projectile primarySpell;
+
 	public float	runForwardSpeed		= 6,		// max speed when running forward
 	runBackSpeed		= 3,		// max speed when running back
 	runSideSpeed		= 4;	// max speed when running to the side
 	
+	private  Animator animator;
 	private CharacterController	charaController;	
 	
 	private TouchStick fireStick;
@@ -34,6 +37,8 @@ public class Player : MonoBehaviour {
 	public void OnEnable()
 	{
 		charaController = gameObject.GetComponent<CharacterController>();
+		animator = gameObject.GetComponent<Animator>();
+
 		moveStick	= touchController.GetStick(STICK_MOVE);
 		fireStick	= touchController.GetStick(STICK_FIRE);
 	}
@@ -82,10 +87,22 @@ public class Player : MonoBehaviour {
 
 		for (;;) {
 			//animator.SetTrigger("Attack1Trigger");
+
+			Vector3 aimVec = fireStick.GetAngle() == 0 ? transform.localRotation * Vector3.forward : fireStick.GetVec3d(true, 0);
+
+			Projectile spell = Instantiate(primarySpell, staffEnd.transform.position, Quaternion.identity) as Projectile; 
+
+			spell.Shoot(aimVec);
+
 			yield return new WaitForSeconds(timeBetweenAttacks);
 		}
 	}
 
+	public void Attack (Vector3 direction) {
+		//Projectile beam = Instantiate(projectile, staff.transform.position, Quaternion.identity) as Projectile; 
+		//beam.Fire(direction);
+	}
+	
 	private Quaternion LookRotation(Vector3 dir) 
 	{
 		if (dir != Vector3.zero)
