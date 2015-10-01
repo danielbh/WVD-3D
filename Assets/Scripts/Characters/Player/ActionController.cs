@@ -6,12 +6,11 @@ using System.Collections.Generic;
 public class ActionController : HumanoidController {
 	
 	private Vector3	worldMoveVec;	// current world-space movement vector (per second)
-	private float	orientCur;	// current character orientation
-	
+
 	public Vector3 Move(Vector3 worldDir, float speed, float fwd, float bkwd, float side) {
 
 			// Transform world vec to local space...
-			Vector3 localDir = RotateVec(worldDir, -orientCur);
+			Vector3 localDir = RotateVec(worldDir);
 			
 			// Apply Forward/Back/Side speed modifiers. 
 
@@ -26,12 +25,12 @@ public class ActionController : HumanoidController {
 			localDir.x *= side;
 			
 			// Transform back to world space...
-			worldMoveVec = RotateVec(localDir * speed, orientCur);
+			worldMoveVec = RotateVec(localDir * speed);
 			return worldMoveVec;
 	}
 	
-	private Vector3 RotateVec(Vector3 vec, float angle)
+	private Vector3 RotateVec(Vector3 vec)
 	{
-		return Quaternion.Euler(0, angle, 0) * vec;
+		return Quaternion.Euler(0, 0, 0) * vec;
 	}
 }

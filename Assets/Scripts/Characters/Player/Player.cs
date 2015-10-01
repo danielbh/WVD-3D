@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Player : MonoBehaviour {
 	
@@ -9,9 +10,13 @@ public class Player : MonoBehaviour {
 	public	float	aimStickDeadZone	= 0.2f;
 	public	float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
 	public  float	aimStickMaxSpeed	= 500;	// aim locking speed at maximum stick tilt (degs/sec)
-	
+
+	public Animator animator;
+
 	public	float	maxTurnSpeed		= 500;	// max turn smoothing speed 
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
+
+	public float timeBetweenAttacks= 0.2f;
 	
 	[HideInInspector]
 	public ActionController actionController; // Test wrapper neccesary for making code testable
@@ -39,6 +44,10 @@ public class Player : MonoBehaviour {
 		{
 			if (moveStick.Pressed())
 			{	
+
+				animator.SetBool("Moving", true);
+				animator.SetBool("Running", true);
+
 				// Use stick's normalized XZ vector and tilt to move...
 				var worldMoveVec = actionController.Move(moveStick.GetVec3d(true, 0), moveStick.GetTilt(), runForwardSpeed, 
 				                      runBackSpeed, runSideSpeed);
@@ -49,12 +58,31 @@ public class Player : MonoBehaviour {
 				{
 					transform.localRotation = LookRotation(moveStick.GetVec3d(true, 0));
 				}
+			} 
+			else 
+			{
+				animator.SetBool("Moving", false);
+				animator.SetBool("Running", false);
 			}
 
 			if (fireStick.Pressed())
 			{
+				StartCoroutine("AttackSequence");
 				transform.localRotation = LookRotation(fireStick.GetVec3d(true, 0));
 			}
+			else
+			{
+				StopCoroutine("AttackSequence");
+			}
+		}
+	}
+
+	public  IEnumerator AttackSequence() {
+		yield return new WaitForSeconds(0.00001f);
+
+		for (;;) {
+			//animator.SetTrigger("Attack1Trigger");
+			yield return new WaitForSeconds(timeBetweenAttacks);
 		}
 	}
 
