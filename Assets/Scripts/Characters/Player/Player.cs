@@ -44,9 +44,6 @@ public class Player : MonoBehaviour {
 		fireStick	= touchController.GetStick(STICK_FIRE);
 	}
 	
-	//Vector2 walkDir;
-	//Vector3 walkDirDampVel;
-	
 	public void Update() 
 	{
 		attackTimer += Time.deltaTime;
@@ -62,7 +59,7 @@ public class Player : MonoBehaviour {
 				var worldMoveVec = actionController.Move(moveStick.GetVec3d(true,0), moveStick.GetTilt(), runForwardSpeed, 
 				                                         runBackSpeed, runSideSpeed);
 				
-				charaController.Move(worldMoveVec * Time.deltaTime);
+				transform.position += worldMoveVec * Time.deltaTime;
 				
 				if (!fireStick.Pressed()) 
 				{
