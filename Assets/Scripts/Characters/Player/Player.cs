@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
 	private TouchStick fireStick;
 	private TouchStick moveStick;
 	
-	public void OnEnable()
+	public void Awake()
 	{
 		charaController = gameObject.GetComponent<CharacterController>();
 		animator = gameObject.GetComponent<Animator>();
