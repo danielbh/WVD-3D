@@ -16,7 +16,6 @@ public class Player : MonoBehaviour {
 	
 	public GameObject staffEnd;
 	
-	public float attackTimer;
 	public float timeBetweenAttacks= 0.5f;
 	
 	[HideInInspector]
@@ -34,6 +33,9 @@ public class Player : MonoBehaviour {
 	
 	private TouchStick fireStick;
 	private TouchStick moveStick;
+
+	private float attackTimer;
+
 	
 	public void Awake()
 	{
