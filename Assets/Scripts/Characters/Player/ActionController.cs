@@ -7,7 +7,7 @@ public class ActionController : HumanoidController {
 	
 	private Vector3	worldMoveVec;	// current world-space movement vector (per second)
 
-	public Vector3 Move(Vector3 worldDir, float speed, float fwd, float bkwd, float side) {
+	public Vector3 Move(Vector3 worldDir, float speed, float fwd, float bkwd, float side) {	
 
 			// Transform world vec to local space...
 			Vector3 localDir = RotateVec(worldDir);
@@ -26,6 +26,7 @@ public class ActionController : HumanoidController {
 			
 			// Transform back to world space...
 			worldMoveVec = RotateVec(localDir * speed);
+
 			return worldMoveVec;
 	}
 

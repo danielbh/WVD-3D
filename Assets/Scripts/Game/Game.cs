@@ -20,6 +20,7 @@ public class Game : MonoBehaviour {
 	{			
 			// Update camera...
 			if (this.cam != null)
+
 			{
 				Transform camTf = this.cam.transform;
 				camTf.position = this.player.transform.position + this.camOfs;
