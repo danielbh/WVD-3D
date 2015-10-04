@@ -29,8 +29,7 @@ public class Player : MonoBehaviour {
 	runSideSpeed		= 4;	// max speed when running to the side
 	
 	private  Animator animator;
-	private CharacterController	charaController;	
-	
+
 	private TouchStick fireStick;
 	private TouchStick moveStick;
 
@@ -39,7 +38,6 @@ public class Player : MonoBehaviour {
 	
 	public void Awake()
 	{
-		charaController = gameObject.GetComponent<CharacterController>();
 		animator = gameObject.GetComponent<Animator>();
 		
 		moveStick	= touchController.GetStick(STICK_MOVE);
