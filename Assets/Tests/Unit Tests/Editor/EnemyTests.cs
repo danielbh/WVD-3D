@@ -3,7 +3,7 @@ using System.Collections;
 using NSubstitute;
 using NUnit.Framework;
 
-public class EnemyTests : MonoBehaviour 
+public class EnemyTests 
 {
 
 	[Test]

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
+[RequireComponent (typeof (Animator))]
 public class Player : MonoBehaviour {
 	
 	public const int STICK_MOVE	= 0;
