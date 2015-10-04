@@ -3,11 +3,13 @@ using System.Collections;
 using NSubstitute;
 using NUnit.Framework;
 
-public class EnemyTests : MonoBehaviour {
+public class EnemyTests : MonoBehaviour 
+{
 
 	[Test]
 	[Category("Movement")]
-	public void EnemyMovesWhenNotAtMinDistance() {
+	public void EnemyMovesWhenNotAtMinDistance() 
+	{
 
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
@@ -19,7 +21,8 @@ public class EnemyTests : MonoBehaviour {
 
 	[Test]
 	[Category("Movement")]
-	public void EnemyStopsWhenAtMinDistance() {
+	public void EnemyStopsWhenAtMinDistance() 
+	{
 		
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
@@ -29,14 +32,54 @@ public class EnemyTests : MonoBehaviour {
 		moveMock.Received(1).Stop();
 	}
 
-	public IMoveComponent GetMoveMock () {
+	[Test]
+	[Category("Combat")]
+	public void EnemyAttacksWhenAttackTimerReadyAndPlayerInRange() 
+	{
+		var attackMock = GetAttackMock();
+		var enemyMock = GetEnemyMock(attackMock);
+
+		enemyMock.Attack (3, 2, true);
+
+		attackMock.Received(1).Attack();
+	}
+
+	[Test]
+	[Category("Combat")]
+	public void EnemyDoesNotAttacksWhenAttackTimerNotReadyAndPlayerInRange() 
+	{
+		var attackMock = GetAttackMock();
+		var enemyMock = GetEnemyMock(attackMock);
+		
+		enemyMock.Attack (1, 2, true);
+		
+		attackMock.DidNotReceive().Attack();
+	}
+
+	public IMoveComponent GetMoveMock ()
+	{
 		return Substitute.For<IMoveComponent> ();
 	}
 
-	public EnemyActionController GetEnemyMock (IMoveComponent move) {
+	public IAttackComponent GetAttackMock () 
+	{
+		return Substitute.For<IAttackComponent> ();
+	}
+	
+	public EnemyActionController GetEnemyMock (IAttackComponent comp) 
+	{
 		
 		var controller = Substitute.For<EnemyActionController>();
-		controller.SetMoveComponent(move);
+		controller.SetAttackComponent(comp);
+		
+		return controller;
+	}
+
+	public EnemyActionController GetEnemyMock (IMoveComponent comp) 
+	{
+		
+		var controller = Substitute.For<EnemyActionController>();
+		controller.SetMoveComponent(comp);
 		
 		return controller;
 	}
