@@ -14,7 +14,7 @@ public class EnemyTests : MonoBehaviour
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
 
-		enemyMock.Move(new Vector3(3, 0, 0), Vector3.zero);
+		enemyMock.Move(new Vector3(3, 0, 0), Vector3.zero, 2);
 
 		moveMock.Received(1).Move();
 	}
@@ -27,7 +27,7 @@ public class EnemyTests : MonoBehaviour
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
 		
-		enemyMock.Move(new Vector3(2, 0, 0), Vector3.zero);
+		enemyMock.Move(new Vector3(2, 0, 0), Vector3.zero, 2);
 		
 		moveMock.Received(1).Stop();
 	}
