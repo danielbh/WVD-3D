@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 [RequireComponent (typeof (Animator))]
+[RequireComponent (typeof (PlayerMagic))]
 public class Player : MonoBehaviour {
 	
 	public const int STICK_MOVE	= 0;
@@ -14,17 +15,13 @@ public class Player : MonoBehaviour {
 	
 	public	float	maxTurnSpeed		= 500;	// max turn smoothing speed 
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
-	
-	public GameObject staffEnd;
-	
+
 	public float timeBetweenAttacks= 0.5f;
-	
+
 	[HideInInspector]
 	public ActionController actionController; // Test wrapper neccesary for making code testable
 	public TouchController	touchController; // Input controller for player actions (ex: move, fire, etc...)
-	
-	public Projectile primarySpell;
-	
+
 	public float	runForwardSpeed		= 6,		// max speed when running forward
 	runBackSpeed		= 3,		// max speed when running back
 	runSideSpeed		= 4;	// max speed when running to the side
@@ -36,11 +33,12 @@ public class Player : MonoBehaviour {
 
 	private float attackTimer;
 
-	
+	private PlayerMagic magic;
+
 	public void Awake()
 	{
-		animator = gameObject.GetComponent<Animator>();
-		
+		animator = GetComponent<Animator>();
+		magic = GetComponent<PlayerMagic>();
 		moveStick	= touchController.GetStick(STICK_MOVE);
 		fireStick	= touchController.GetStick(STICK_FIRE);
 	}
@@ -92,10 +90,8 @@ public class Player : MonoBehaviour {
 		attackTimer = 0;
 		
 		Vector3 aimVec = fireStick.GetAngle() == 0 ? transform.localRotation * Vector3.forward : fireStick.GetVec3d(true, 0);
-		
-		Projectile spell = Instantiate(primarySpell, staffEnd.transform.position, Quaternion.identity) as Projectile; 
-		
-		spell.Shoot(aimVec);
+
+		magic.CastPrimarySpell(aimVec);
 	}
 	
 	private Quaternion LookRotation(Vector3 dir) 
