@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Game : MonoBehaviour {
-
+	
 	public Camera cam;
 	public Player player;
 	
@@ -10,24 +10,24 @@ public class Game : MonoBehaviour {
 	
 	void Start()
 	{
-		if ((this.cam != null) && (this.player != null))
-			this.camOfs = this.cam.transform.position - this.player.transform.position;
+		if ((cam != null) && (player != null))
+			camOfs = cam.transform.position - player.transform.position;
 		else
-			this.camOfs = new Vector3(0, 5, -5);
+			camOfs = new Vector3(0, 5, -5);
 	}
 	
 	void Update()
 	{			
-			// Update camera...
-			if (this.cam != null)
-
-			{
-				Transform camTf = this.cam.transform;
-				camTf.position = this.player.transform.position + this.camOfs;
-			}
+		// Update camera...
+		if ((cam != null) && (player != null))
 			
-			// TODO: Zone multi-touch and screen
-			// TODO: Zone pause, see Control Freak
+		{
+			Transform camTf = cam.transform;
+			camTf.position = player.transform.position + camOfs;
+		}
+		
+		// TODO: Zone multi-touch and screen
+		// TODO: Zone pause, see Control Freak
 	}
 }
 

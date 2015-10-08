@@ -10,6 +10,7 @@ public class EnemyAttackEditor : Editor
 	SerializedProperty rangedProp;
 	SerializedProperty projectileProp;
 	SerializedProperty weaponProp;
+	SerializedProperty damageProp;
 
 	void OnEnable () 
 	{
@@ -18,6 +19,7 @@ public class EnemyAttackEditor : Editor
 		rangedProp = serializedObject.FindProperty ("ranged");
 		projectileProp = serializedObject.FindProperty("projectile");
 		weaponProp = serializedObject.FindProperty("weapon");
+		damageProp = serializedObject.FindProperty("damage");
 	}
 
 	public override void OnInspectorGUI() 
@@ -32,6 +34,8 @@ public class EnemyAttackEditor : Editor
 		{
 			EditorGUILayout.PropertyField(weaponProp, new GUIContent("Weapon"));
 			EditorGUILayout.PropertyField(projectileProp, new GUIContent("Projectile"));
+		} else {
+			EditorGUILayout.PropertyField(damageProp, new GUIContent("Damage"));
 		}
 
 		// Apply changes to the serializedProperty - always do this in the end of OnInspectorGUI.

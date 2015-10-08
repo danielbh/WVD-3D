@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class ActionController : HumanoidController {
+public class ActionController {
 	
 	private Vector3	worldMoveVec;	// current world-space movement vector (per second)
 

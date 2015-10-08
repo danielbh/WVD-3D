@@ -39,9 +39,9 @@ public class EnemyTests
 		var attackMock = GetAttackMock();
 		var enemyMock = GetEnemyMock(attackMock);
 
-		enemyMock.Attack (3, 2, true);
+		enemyMock.Attack (3, 2, true, false);
 
-		attackMock.Received(1).Attack();
+		attackMock.Received(1).MeleeAttack();
 	}
 
 	[Test]
@@ -51,9 +51,22 @@ public class EnemyTests
 		var attackMock = GetAttackMock();
 		var enemyMock = GetEnemyMock(attackMock);
 		
-		enemyMock.Attack (1, 2, true);
+		enemyMock.Attack (1, 2, true, false);
 		
-		attackMock.DidNotReceive().Attack();
+		attackMock.DidNotReceive().MeleeAttack();
+		attackMock.DidNotReceive().RangedAttack();
+	}
+
+	[Test]
+	[Category("Combat")]
+	public void RangedEnemyAttacksWhenReadyAndPlayerInRange() 
+	{
+		var attackMock = GetAttackMock();
+		var enemyMock = GetEnemyMock(attackMock);
+		
+		enemyMock.Attack (2, 1, true, true);
+		
+		attackMock.Received(1).RangedAttack();
 	}
 
 	public IMoveComponent GetMoveMock ()
