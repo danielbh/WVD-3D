@@ -4,15 +4,15 @@ using NUnit.Framework;
 using System;
 
 [TestFixture]
-public class HitPointsTests  {
+public class HealthTests  {
 	
-	private IHitPointsComponent component;
-	private HitPointsController controller;
+	private IHealthComponent component;
+	private HealthController controller;
 	
 	[SetUp] public void Init() 
 	{ 
-		component = GetHitPointsMock();
-		controller = GetControllerMockForHitPoints(component);
+		component = GetHealthMock();
+		controller = GetControllerMockForHealth(component);
 	}
 	
 	[Test]
@@ -33,14 +33,14 @@ public class HitPointsTests  {
 		component.Received(1).Die();
 	}
 	
-	public IHitPointsComponent GetHitPointsMock () 
+	public IHealthComponent GetHealthMock () 
 	{
-		return Substitute.For<IHitPointsComponent> ();
+		return Substitute.For<IHealthComponent> ();
 	}
 	
-	public HitPointsController GetControllerMockForHitPoints (IHitPointsComponent component) 
+	public HealthController GetControllerMockForHealth (IHealthComponent component) 
 	{
-		var controller = Substitute.For<HitPointsController>();
+		var controller = Substitute.For<HealthController>();
 		controller.SetComponent(component);
 		return controller;
 	}
