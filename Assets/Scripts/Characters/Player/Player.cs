@@ -6,10 +6,11 @@ using System.Collections;
 [RequireComponent (typeof (PlayerMagic))]
 public class Player : MonoBehaviour {
 	
-	public const int STICK_MOVE	= 0;
-	public const int STICK_FIRE	= 1;
-	public const int SPELL_1 = 2;
-	public const int SPELL_2 = 3;
+	const int STICK_MOVE	= 0;
+	const int STICK_FIRE	= 1;
+
+	const string CONCUSSIVE_BLAST = "CONCUSSIVE_BLAST_SPELL";
+	const string INVULNERABILITY = "INVULNERABILITY_SPELL";
 	
 	public	float	aimStickDeadZone	= 0.2f;
 	public	float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
@@ -32,7 +33,7 @@ public class Player : MonoBehaviour {
 	
 	TouchStick fireStick;
 	TouchStick moveStick;
-
+	
 	List<TouchZone> SpellButtons
 	{
 		get 
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour {
 	
 	float attackTimer;
 	PlayerMagic magic;
-
+	
 	public void Awake()
 	{
 		animator = GetComponent<Animator>();
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour {
 			ManageSpellButtons();
 		}
 	}
-
+	
 	void ManageMoveStick() {
 		if (moveStick.Pressed())
 		{	
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour {
 			animator.SetBool("Running", false);
 		}
 	}
-
+	
 	void ManageFireStick() {
 		if (fireStick.Pressed())
 		{
@@ -107,11 +108,24 @@ public class Player : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	void ManageSpellButtons() {
 		foreach (TouchZone sb in SpellButtons) {
 			if (sb.JustUniPressed()) {
-				Debug.Log (sb.name + " JUST PRESSED.");
+				Debug.Log (sb.name + " HAS BEEN CAST");
+				switch ( sb.name) 
+				{
+				case CONCUSSIVE_BLAST :
+					magic.CastConcussiveBlastSpell();
+					break;
+				case INVULNERABILITY :
+					// TODO: Make invulnerable for x seconds
+					// TODO: Create particle effect
+					// TODO: Turn off hurt sound effect
+				
+				default:
+					break;
+				}
 			}
 		}
 	}
