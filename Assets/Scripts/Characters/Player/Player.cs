@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
 	
 	public const int STICK_MOVE	= 0;
 	public const int STICK_FIRE	= 1;
+	public const int SPELL_1 = 2;
+	public const int SPELL_2 = 3;
 	
 	public	float	aimStickDeadZone	= 0.2f;
 	public	float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
@@ -15,25 +17,39 @@ public class Player : MonoBehaviour {
 	
 	public	float	maxTurnSpeed		= 500;	// max turn smoothing speed 
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
-
+	
 	public float timeBetweenAttacks= 0.5f;
-
+	
 	[HideInInspector]
 	public ActionController actionController; // Test wrapper neccesary for making code testable
 	public TouchController	touchController; // Input controller for player actions (ex: move, fire, etc...)
-
+	
 	public float	runForwardSpeed		= 6,		// max speed when running forward
 	runBackSpeed		= 3,		// max speed when running back
 	runSideSpeed		= 4;	// max speed when running to the side
 	
-	private  Animator animator;
+	Animator animator;
+	
+	TouchStick fireStick;
+	TouchStick moveStick;
 
-	private TouchStick fireStick;
-	private TouchStick moveStick;
-
-	private float attackTimer;
-
-	private PlayerMagic magic;
+	List<TouchZone> SpellButtons
+	{
+		get 
+		{
+			List<TouchZone> results = new List<TouchZone>();
+			foreach (TouchZone tz in touchController.touchZones) {
+				if (tz.name.Contains ("SPELL")) 
+				{
+					results.Add(tz);
+				}
+			}
+			return results;
+		}
+	}
+	
+	float attackTimer;
+	PlayerMagic magic;
 
 	public void Awake()
 	{
@@ -49,39 +65,54 @@ public class Player : MonoBehaviour {
 		
 		if (touchController != null)
 		{
-			if (moveStick.Pressed())
-			{	
-				animator.SetBool("Moving", true);
-				animator.SetBool("Running", true);
-				
-				// Use stick's normalized XZ vector and tilt to move...
-				var worldMoveVec = actionController.Move(moveStick.GetVec3d(true,0), moveStick.GetTilt(), runForwardSpeed, 
-				                                         runBackSpeed, runSideSpeed);
-				
-				transform.position += worldMoveVec * Time.deltaTime;
-				
-				if (!fireStick.Pressed()) 
-				{
-					transform.localRotation = LookRotation(moveStick.GetVec3d(true, 0));
-				}
-			} 
+			ManageMoveStick();
+			ManageFireStick();
+			ManageSpellButtons();
+		}
+	}
+
+	void ManageMoveStick() {
+		if (moveStick.Pressed())
+		{	
+			animator.SetBool("Moving", true);
+			animator.SetBool("Running", true);
 			
-			if (!moveStick.Pressed())
+			// Use stick's normalized XZ vector and tilt to move...
+			var worldMoveVec = actionController.Move(moveStick.GetVec3d(true,0), moveStick.GetTilt(), runForwardSpeed, 
+			                                         runBackSpeed, runSideSpeed);
+			
+			transform.position += worldMoveVec * Time.deltaTime;
+			
+			if (!fireStick.Pressed()) 
 			{
-				animator.SetBool("Moving", false);
-				animator.SetBool("Running", false);
+				transform.localRotation = LookRotation(moveStick.GetVec3d(true, 0));
 			}
+		} 
+		
+		if (!moveStick.Pressed())
+		{
+			animator.SetBool("Moving", false);
+			animator.SetBool("Running", false);
+		}
+	}
+
+	void ManageFireStick() {
+		if (fireStick.Pressed())
+		{
+			transform.localRotation = LookRotation(fireStick.GetVec3d(true, 0));
 			
-			if (fireStick.Pressed())
+			if (attackTimer >= timeBetweenAttacks && Time.timeScale != 0)
 			{
-				transform.localRotation = LookRotation(fireStick.GetVec3d(true, 0));
-				
-				if (attackTimer >= timeBetweenAttacks && Time.timeScale != 0)
-				{
-					Attack();
-				}
+				Attack();
 			}
-			
+		}
+	}
+
+	void ManageSpellButtons() {
+		foreach (TouchZone sb in SpellButtons) {
+			if (sb.JustUniPressed()) {
+				Debug.Log (sb.name + " JUST PRESSED.");
+			}
 		}
 	}
 	
@@ -90,11 +121,11 @@ public class Player : MonoBehaviour {
 		attackTimer = 0;
 		
 		Vector3 aimVec = fireStick.GetAngle() == 0 ? transform.localRotation * Vector3.forward : fireStick.GetVec3d(true, 0);
-
+		
 		magic.CastPrimarySpell(aimVec);
 	}
 	
-	private Quaternion LookRotation(Vector3 dir) 
+	Quaternion LookRotation(Vector3 dir) 
 	{
 		if (dir != Vector3.zero)
 			return Quaternion.LookRotation(dir);
