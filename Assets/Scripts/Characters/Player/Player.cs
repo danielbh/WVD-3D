@@ -116,13 +116,11 @@ public class Player : MonoBehaviour {
 				switch ( sb.name) 
 				{
 				case CONCUSSIVE_BLAST :
-					magic.CastConcussiveBlastSpell();
+					magic.CastConcussiveBlastSpell(); 
 					break;
 				case INVULNERABILITY :
-					// TODO: Make invulnerable for x seconds
-					// TODO: Create particle effect
-					// TODO: Turn off hurt sound effect
-				
+					magic.CastInvulnerabilitySpell();
+					break;
 				default:
 					break;
 				}
