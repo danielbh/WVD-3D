@@ -10,11 +10,14 @@ public class Player : MonoBehaviour {
 	const int STICK_FIRE	= 1;
 
 	const string CONCUSSIVE_BLAST = "CONCUSSIVE_BLAST_SPELL";
-	const string INVULNERABILITY = "INVULNERABILITY_SPELL";
+	const string WIZARD_SHIELD = "WIZARD_SHIELD_SPELL";
+	const string TELEPORT = "TELEPORT_SPELL";
+	const string FROST_NOVA = "FROST_NOVA_SPELL";
+	const string METEOR_SHOWER = "METEOR_SHOWER_SPELL";
 	
-	public	float	aimStickDeadZone	= 0.2f;
-	public	float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
-	public  float	aimStickMaxSpeed	= 500;	// aim locking speed at maximum stick tilt (degs/sec)
+	public float	aimStickDeadZone	= 0.2f;
+	public float	aimStickMinSpeed	= 0;		// aim locking speed just above dead zone (degs/sec) 
+	public float	aimStickMaxSpeed	= 500;	// aim locking speed at maximum stick tilt (degs/sec)
 	
 	public	float	maxTurnSpeed		= 500;	// max turn smoothing speed 
 	public	float	turnSmoothingTime	= 0.3f;		// turn smoothing time
@@ -40,7 +43,7 @@ public class Player : MonoBehaviour {
 		{
 			List<TouchZone> results = new List<TouchZone>();
 			foreach (TouchZone tz in touchController.touchZones) {
-				if (tz.name.Contains ("SPELL")) 
+				if (tz.name.Contains ("SPELL")) // TODO: Too prone to failure!!!
 				{
 					results.Add(tz);
 				}
@@ -118,8 +121,17 @@ public class Player : MonoBehaviour {
 				case CONCUSSIVE_BLAST :
 					magic.CastConcussiveBlastSpell(); 
 					break;
-				case INVULNERABILITY :
-					magic.CastInvulnerabilitySpell();
+				case WIZARD_SHIELD :
+					magic.CastWizardShieldSpell();
+					break;
+				case TELEPORT:
+					magic.CastTeleportSpell();
+					break;
+				case FROST_NOVA:
+					magic.CastFrostNovaSpell();
+					break;
+				case METEOR_SHOWER:
+					magic.CastMeteorShowerSpell();
 					break;
 				default:
 					break;
