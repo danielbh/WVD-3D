@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
 	const string CONCUSSIVE_BLAST = "CONCUSSIVE_BLAST_SPELL";
 	const string WIZARD_SHIELD = "WIZARD_SHIELD_SPELL";
 	const string TELEPORT = "TELEPORT_SPELL";
-	const string ICE_NOVA = "ICE_NOVA_SPELL";
+	const string ICE_BURST = "ICE_BURST_SPELL";
 	const string METEOR_SHOWER = "METEOR_SHOWER_SPELL";
 	
 	public float	aimStickDeadZone	= 0.2f;
@@ -127,8 +127,8 @@ public class Player : MonoBehaviour {
 				case TELEPORT:
 					magic.CastTeleportSpell();
 					break;
-				case ICE_NOVA:
-					magic.CastIceNovaSpell();
+				case ICE_BURST:
+					magic.CastIceBurstSpell();
 					break;
 				case METEOR_SHOWER:
 					magic.CastMeteorShowerSpell();
