@@ -4,34 +4,39 @@ using NUnit.Framework;
 
 public class EnemyTests 
 {
-
 	[Test]
 	[Category("Movement")]
 	public void EnemyMovesWhenNotAtMinDistance() 
 	{
-
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
 
-		enemyMock.Move(new Vector3(3, 0, 0), Vector3.zero, 2);
+        GameObject gameObj = new GameObject();
+
+        gameObj.transform.position = new Vector3(3, 0, 0);
+
+        enemyMock.Move(gameObj.transform, Vector3.zero, 2);
 
 		moveMock.Received(1).Move();
 	}
 
-	[Test]
-	[Category("Movement")]
-	public void EnemyStopsWhenAtMinDistance() 
-	{
-		
-		var moveMock = GetMoveMock();
-		var enemyMock = GetEnemyMock(moveMock);
-		
-		enemyMock.Move(new Vector3(2, 0, 0), Vector3.zero, 2);
-		
-		moveMock.Received(1).Stop();
-	}
+    [Test]
+    [Category("Movement")]
+    public void LookAtReceivesExpectedArgument()
+    {
+        var moveMock = GetMoveMock();
+        var enemyMock = GetEnemyMock(moveMock);
 
-	[Test]
+        GameObject gameObj = new GameObject();
+
+        gameObj.transform.position = new Vector3(2, 0, 0);
+
+        enemyMock.Move(gameObj.transform, Vector3.zero, 2);
+
+        moveMock.Received(1).LookAt(gameObj.transform);
+    }
+
+    [Test]
 	[Category("Combat")]
 	public void EnemyAttacksWhenAttackTimerReadyAndPlayerInRange() 
 	{
