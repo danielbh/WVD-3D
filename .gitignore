@@ -39,8 +39,7 @@ Control-Freak-Demos/
 # ============ #
 # High memory assets to avoid repo bloat. #
 # ============ #
-Characters/
-Assets/Characters.meta
+Assets/Models/Characters/
 Assets/Models/Environment/
 Assets/Models/Environment.meta
 Assets/Models/Characters.meta

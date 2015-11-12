@@ -4,14 +4,27 @@ using NUnit.Framework;
 
 public class EnemyTests 
 {
-	[Test]
+    GameObject gameObj;
+
+    [TearDown]
+    public void TearDown()
+    {
+        if (gameObj)
+        {
+            // Hack... without this teardown then GameObject
+            // will be instantiated in scene.
+            Object.DestroyImmediate(gameObj);
+        }
+    }
+
+    [Test]
 	[Category("Movement")]
 	public void EnemyMovesWhenNotAtMinDistance() 
 	{
 		var moveMock = GetMoveMock();
 		var enemyMock = GetEnemyMock(moveMock);
 
-        GameObject gameObj = new GameObject();
+        gameObj = new GameObject();
 
         gameObj.transform.position = new Vector3(3, 0, 0);
 
@@ -27,7 +40,7 @@ public class EnemyTests
         var moveMock = GetMoveMock();
         var enemyMock = GetEnemyMock(moveMock);
 
-        GameObject gameObj = new GameObject();
+        gameObj = new GameObject();
 
         gameObj.transform.position = new Vector3(2, 0, 0);
 
@@ -83,19 +96,19 @@ public class EnemyTests
 		return Substitute.For<IAttackComponent> ();
 	}
 	
-	public EnemyActionController GetEnemyMock (IAttackComponent comp) 
+	public EnemyController GetEnemyMock (IAttackComponent comp) 
 	{
 		
-		var controller = Substitute.For<EnemyActionController>();
+		var controller = Substitute.For<EnemyController>();
 		controller.SetAttackComponent(comp);
 		
 		return controller;
 	}
 
-	public EnemyActionController GetEnemyMock (IMoveComponent comp) 
+	public EnemyController GetEnemyMock (IMoveComponent comp) 
 	{
 		
-		var controller = Substitute.For<EnemyActionController>();
+		var controller = Substitute.For<EnemyController>();
 		controller.SetMoveComponent(comp);
 		
 		return controller;
