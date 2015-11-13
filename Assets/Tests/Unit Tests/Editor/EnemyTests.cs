@@ -86,7 +86,35 @@ public class EnemyTests
 		attackMock.Received(1).RangedAttack();
 	}
 
-	public IMoveComponent GetMoveMock ()
+    [Test]
+    [Category("Debuff")]
+    public void TestEnemyFreeze()
+    {
+        var debuffMock = GetDebuffMock();
+        var enemyMock = GetEnemyMock(debuffMock);
+
+        enemyMock.Freeze();
+
+        debuffMock.Received(1).ToggleAnimator(false);
+        debuffMock.Received(1).ToggleMovement(false);
+        debuffMock.Received(1).ToggleAttacking(false);
+    }
+
+    [Test]
+    [Category("Debuff")]
+    public void TestEnemyUnFreeze()
+    {
+        var debuffMock = GetDebuffMock();
+        var enemyMock = GetEnemyMock(debuffMock);
+
+        enemyMock.Unfreeze();
+
+        debuffMock.Received(1).ToggleAnimator(true);
+        debuffMock.Received(1).ToggleMovement(true);
+        debuffMock.Received(1).ToggleAttacking(true);
+    }
+
+    public IMoveComponent GetMoveMock ()
 	{
 		return Substitute.For<IMoveComponent> ();
 	}
@@ -95,10 +123,14 @@ public class EnemyTests
 	{
 		return Substitute.For<IAttackComponent> ();
 	}
-	
-	public EnemyController GetEnemyMock (IAttackComponent comp) 
-	{
-		
+
+    public IDebuffComponent GetDebuffMock ()
+    {
+        return Substitute.For<IDebuffComponent>();
+    }
+
+    public EnemyController GetEnemyMock (IAttackComponent comp) 
+	{		
 		var controller = Substitute.For<EnemyController>();
 		controller.SetAttackComponent(comp);
 		
@@ -106,11 +138,18 @@ public class EnemyTests
 	}
 
 	public EnemyController GetEnemyMock (IMoveComponent comp) 
-	{
-		
+	{	
 		var controller = Substitute.For<EnemyController>();
 		controller.SetMoveComponent(comp);
 		
 		return controller;
 	}
+
+    public EnemyController GetEnemyMock(IDebuffComponent comp)
+    {
+        var controller = Substitute.For<EnemyController>();
+        controller.SetDebuffComponent(comp);
+
+        return controller;
+    }
 }

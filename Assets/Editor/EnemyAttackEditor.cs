@@ -14,20 +14,19 @@ public class EnemyAttackEditor : Editor
 
 	void OnEnable () 
 	{
-		// Setup serialized properties
-		timeBwAttacksProp = serializedObject.FindProperty("timeBetweenAttacks");
+        // Setup serialized properties
+        timeBwAttacksProp = serializedObject.FindProperty("timeBetweenAttacks");
 		rangedProp = serializedObject.FindProperty ("ranged");
 		projectileProp = serializedObject.FindProperty("projectile");
 		weaponProp = serializedObject.FindProperty("weapon");
-		damageProp = serializedObject.FindProperty("damage");
+        damageProp = serializedObject.FindProperty("damage");
 	}
 
 	public override void OnInspectorGUI() 
 	{
 		// Update the serializedProperty - always do this at the beginning of OnInspectorGUI.
 		serializedObject.Update ();
-
-		EditorGUILayout.PropertyField(timeBwAttacksProp, new GUIContent("Time Between Attacks"));
+        EditorGUILayout.PropertyField(timeBwAttacksProp, new GUIContent("Time Between Attacks"));
 		EditorGUILayout.PropertyField(rangedProp, new GUIContent("Ranged"));
 
 		if (rangedProp.boolValue == true)

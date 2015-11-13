@@ -6,9 +6,9 @@ using System;
 public class EnemyController {
 
 	public IMoveComponent moveComponent;
-
 	public IAttackComponent attackComponent;
-	
+    public IDebuffComponent debuffComponent;
+
 	public void SetMoveComponent (IMoveComponent component) {
 		moveComponent = component;
 	}
@@ -16,6 +16,11 @@ public class EnemyController {
 	public void SetAttackComponent (IAttackComponent component) {
 		attackComponent = component;
 	}
+
+    public void SetDebuffComponent(IDebuffComponent component)
+    {
+        debuffComponent = component;
+    }
 
     public void Move (Transform target, Vector3 self, float minDist) {
 
@@ -40,4 +45,17 @@ public class EnemyController {
 		}
 	}
 
+    public void Freeze()
+    {
+        debuffComponent.ToggleAnimator(false);
+        debuffComponent.ToggleMovement(false);
+        debuffComponent.ToggleAttacking(false);
+    }
+
+    public void Unfreeze()
+    {
+        debuffComponent.ToggleAnimator(true);
+        debuffComponent.ToggleMovement(true);
+        debuffComponent.ToggleAttacking(true);
+    }
 }

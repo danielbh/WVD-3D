@@ -10,7 +10,10 @@ public class EnemyMovement : MonoBehaviour, IMoveComponent
 	[HideInInspector]
 	public EnemyController controller;
 
-    public bool immobilized = false; // Enemy will not move on true.
+    // You need to use movementEnabled instead of default
+    // enabled prop because if you don't, enemies will slide from 
+    //inertia if frozen while moving.
+    public bool movementEnabled = true; // Enemy will not move on true.
 		 
 	float stopDistFromPlayer;
 
@@ -33,8 +36,8 @@ public class EnemyMovement : MonoBehaviour, IMoveComponent
 	void Update ()
 	{
 		// If player is alive.
-		if (player != null && immobilized == false) {
-            // TODO: re-enable animation in case of previous immobilized.
+		if (player != null && movementEnabled)
+        {
             controller.Move(player.transform, transform.position, stopDistFromPlayer);
         } else {
             // If player is dead enemies will not run to the last player location recieved.

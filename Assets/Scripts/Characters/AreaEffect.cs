@@ -45,24 +45,30 @@ public class AreaEffect : NCMonoBehaviour
 
             if (rb != null)
             {
-                CreateIceBlock(rb.gameObject, duration); 
+                CreateIceBlock(rb.gameObject, duration);
             }
         }
         Destroy(gameObject, 0.5f);
     }
 
-    void CreateIceBlock (GameObject target, float duration)
+    void CreateIceBlock(GameObject target, float duration)
     {
         GameObject iceBlock = GetComponent<MaterializedObject>().model;
 
+        bool frozen = target.GetComponent<Debuff>().Frozen;
+
         if (iceBlock != null)
         {
-            Vector3 pos = target.transform.position;
-            // Instantiate Iceblock at feet of enemy
-            GameObject iceBlockCopy = Instantiate(iceBlock, pos, Quaternion.identity) as GameObject;
+            if (!frozen)
+            {
+                Vector3 pos = target.transform.position;
+                // Instantiate Iceblock at feet of enemy
+                GameObject iceBlockCopy = Instantiate(iceBlock, pos, Quaternion.identity) as GameObject;
 
-            FreezeEnemy(target, duration);
-            Destroy(iceBlockCopy, duration);
+                FreezeEnemy(target, duration);
+                Destroy(iceBlockCopy, duration);
+            }
+
         }
         else
         {

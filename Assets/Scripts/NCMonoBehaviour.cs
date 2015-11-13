@@ -9,7 +9,6 @@ public class NCMonoBehaviour : MonoBehaviour {
 		for (int i = 0; i < invokeCount; i++)
 		{
 			method();
-			//print (i);
 			yield return new WaitForSeconds(interval);
 		}
 	}

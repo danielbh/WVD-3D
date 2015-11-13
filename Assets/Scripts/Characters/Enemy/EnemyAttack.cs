@@ -8,13 +8,10 @@ public class EnemyAttack : MonoBehaviour, IAttackComponent {
 	public EnemyController controller;
 	public bool ranged;
 	public int damage = 25;
-    public bool passive = false; // Enemy will not attack on true.
 
 	// Only valid if ranged is true
 	public Projectile projectile;
 	public GameObject weapon;
-
-    public bool attackDisabled = false;
 
 	public float timeBetweenAttacks = 1.5f;
 //	public int attackDamage = 10;
@@ -64,7 +61,8 @@ public class EnemyAttack : MonoBehaviour, IAttackComponent {
 		timer += Time.deltaTime;
 
 		// If player is alive, and attack is enabled
-		if (player != null && !attackDisabled) {
+		if (player != null)
+        {
 			// If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
 			controller.Attack(timer, timeBetweenAttacks, playerInRange, ranged);
 		}

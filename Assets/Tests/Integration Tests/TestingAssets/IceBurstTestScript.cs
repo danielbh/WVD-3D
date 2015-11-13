@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IceBurstTestScript : MonoBehaviour {
+public class IceBurstTestScript : NCMonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.gameObject.GetComponent<PlayerMagic>().CastIceBurstSpell();
+    public int numOfTimesToCast = 1;
+    GameObject player;
+
+    // Use this for initialization
+    void Start () {
+        player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(InvokeMethod(Cast, 0, numOfTimesToCast));
     }
 
+    void Cast()
+    {
+        player.gameObject.GetComponent<PlayerMagic>().CastIceBurstSpell();
+    }
 }
