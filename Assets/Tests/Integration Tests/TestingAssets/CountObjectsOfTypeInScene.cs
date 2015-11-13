@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CountObjectsOfTypeInScene : MonoBehaviour {
 
-    public GameObject gameObject;
+    public string tagName;
     public int expected;
     public float delayInSeconds = 1;
 
@@ -15,7 +15,7 @@ public class CountObjectsOfTypeInScene : MonoBehaviour {
 
     void CountObjects()
     {
-        int actual = GameObject.FindGameObjectsWithTag("IceBlock").Length;
+        int actual = GameObject.FindGameObjectsWithTag(tagName).Length;
 
         if (expected == actual)
         {

@@ -92,6 +92,4 @@ public class EnemyAttack : MonoBehaviour, IAttackComponent {
 	}
 
 	#endregion
-
-
 }

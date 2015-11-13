@@ -30,7 +30,7 @@ public class EnemyMovement : MonoBehaviour, IMoveComponent
 		animator = gameObject.GetComponent<Animator>();
 		nav = GetComponent <NavMeshAgent> ();
 
-		 stopDistFromPlayer = GetComponent <SphereCollider>().radius;
+		stopDistFromPlayer = GetComponent <SphereCollider>().radius;
 	}
 	
 	void Update ()
