@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VerifyGameObjDoesNotMove : MonoBehaviour {
+public class VerifyFrozenGameObjDoesNotMove : MonoBehaviour {
 
     public GameObject obj;
     public float delayPassInSeconds = 2;
@@ -28,6 +28,17 @@ public class VerifyGameObjDoesNotMove : MonoBehaviour {
 
     void Pass()
     {
+        RemoveIceBlocks();
         IntegrationTest.Pass();
+    }
+
+    void RemoveIceBlocks()
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("IceBlock");
+
+        foreach (GameObject obj in objects)
+        {
+            Destroy(obj);
+        }
     }
 }

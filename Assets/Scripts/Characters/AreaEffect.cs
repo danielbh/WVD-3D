@@ -22,16 +22,19 @@ public class AreaEffect : NCMonoBehaviour
         foreach (Collider hit in colliders)
         {
             Rigidbody rb = hit.GetComponent<Rigidbody>();
+            bool enemyFrozen = rb.gameObject.GetComponent<Debuff>().Frozen;
 
             if (rb != null)
             {
-                rb.isKinematic = false;
-
-                rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
+                if (!enemyFrozen)
+                {
+                    rb.isKinematic = false;
+                    rb.AddExplosionForce(power, explosionPos, radius, 3.0F);
+                    StartCoroutine(MakeKinematic(rb, 0.1f));
+                }
 
                 // Attempt to hit gameObject to see if it can take damage.
                 Hit(rb.gameObject);
-                StartCoroutine(MakeKinematic(rb, 0.1f));
             }
         }
         Destroy(gameObject, 0.5f);
@@ -59,10 +62,11 @@ public class AreaEffect : NCMonoBehaviour
 
         if (iceBlock != null)
         {
-
             Vector3 pos = target.transform.position;
             // Instantiate Iceblock at feet of enemy
             GameObject iceBlockCopy = Instantiate(iceBlock, pos, Quaternion.identity) as GameObject;
+
+            iceBlockCopy.GetComponent<DestroyIfTargetNull>().SetTarget(target);
 
             FreezeEnemy(target, duration);
             Destroy(iceBlockCopy, duration);

@@ -3,5 +3,5 @@ using System.Collections;
 
 public class MaterializedObject : MonoBehaviour
 {
-    public GameObject model;
+   public GameObject model;
 }
