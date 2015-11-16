@@ -4,7 +4,7 @@ using System.Collections;
 public class RemoveObjectsWithTagFromScene : MonoBehaviour {
 
     public float delayInSeconds = 2;
-    public string tag;
+    public string objTag;
 
     void Start () {
         Invoke("Remove", delayInSeconds);
@@ -12,7 +12,7 @@ public class RemoveObjectsWithTagFromScene : MonoBehaviour {
 
     void Remove()
     {
-        GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(objTag);
 
         foreach(GameObject obj in objects)
         {

@@ -61,9 +61,9 @@ public class Player : MonoBehaviour {
 		magic = GetComponent<PlayerMagic>();
 		moveStick	= touchController.GetStick(STICK_MOVE);
 		fireStick	= touchController.GetStick(STICK_FIRE);
-	}
-	
-	public void Update() 
+    }
+
+    public void Update() 
 	{
 		attackTimer += Time.deltaTime;
 		

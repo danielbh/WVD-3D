@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-[System.Serializable]
+[RequireComponent(typeof(Player))]
 public class PlayerMagic : MonoBehaviour 
 {
 	public Projectile primarySpell;
@@ -9,8 +8,29 @@ public class PlayerMagic : MonoBehaviour
 	public AreaEffect iceBurst;
 	public WizardShield wizardShield;
 	public GameObject staffEnd;
-
+    public float spellTimeOut = 5;
     public float iceBurstDuration = 2;
+
+    TouchController touchController;
+    TouchStick[] touchSticks;
+    bool teleporting;
+    float timer;
+    Camera camera; // To interpret position of a new teleport location.
+
+    void OnEnable()
+    {
+        touchController = GetComponent<Player>().touchController;
+        touchSticks = touchController.sticks;
+        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    }
+
+    void Update()
+    {
+        if (teleporting)
+        {
+            ManageTeleport();
+        }
+    }
 
 	public void CastPrimarySpell(Vector3 dir) 
 	{
@@ -45,10 +65,7 @@ public class PlayerMagic : MonoBehaviour
 
 	public void CastTeleportSpell()
 	{
-		// TODO: Instiatate Teleport
-        // TODO: Start timeout timer 5 seconds
-        // TODO: If user presses the screen within 5 seconds the player teleports
-        // TODO: If not, nothing happens.
+        EnableTeleportationMode();
 	}
 
 	public void CastIceBurstSpell()
@@ -63,4 +80,49 @@ public class PlayerMagic : MonoBehaviour
 	{
 
 	}
+
+    void ManageTeleport()
+    {
+        timer += Time.deltaTime;
+
+        // teleport time out
+        if (timer > spellTimeOut)
+        {
+            DisableTeleportationMode();
+        }
+
+        if (touchController.touchZones[0].JustUniReleased())
+        {
+            // FIXME: Doesn't teleport to location as expected
+            Vector3 worldPos = camera.ScreenToWorldPoint(touchController.touchZones[0].GetReleasedUniStartPos());
+            gameObject.transform.position = new Vector3(worldPos.z, 0, worldPos.x);
+
+            DisableTeleportationMode();
+        }
+    }
+
+    void EnableTouchSticks()
+    {
+        touchSticks[0].Enable();
+        touchSticks[1].Enable();
+    }
+
+    void EnableTeleportationMode()
+    {
+        teleporting = true;
+        DisableTouchSticks();
+    }
+
+    void DisableTeleportationMode()
+    {
+        timer = 0;
+        teleporting = false;
+        EnableTouchSticks();
+    }
+
+    void DisableTouchSticks()
+    {
+        touchSticks[0].Disable();
+        touchSticks[1].Disable();
+    }
 }
