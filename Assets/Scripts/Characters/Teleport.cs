@@ -5,16 +5,13 @@ public class Teleport : MonoBehaviour {
 
 	GameObject player;
 	
-	void Start()
+	void OnEnable()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
 	}
 	
-	// Update is called once per frame
 	void Update () {
 	
 	}
-
-	// TODO: Goes into 'select player teleport location' mode
-	// TODO: Once selected teleport to location
+    
 }

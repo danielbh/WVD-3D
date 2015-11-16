@@ -3,7 +3,10 @@ using System.Collections;
 
 public class WizardShield : MonoBehaviour 
 {
-	GameObject player;
+    public float duration = 5;
+    public float timer;
+
+    GameObject player;
 
 	void Start()
 	{
@@ -17,13 +20,14 @@ public class WizardShield : MonoBehaviour
 		{
 			Debug.LogError ("Player doesn't exist.");
 		}
-
-		Destroy(gameObject, 5);
 	}
 
 	void Update() 
 	{
-		if (player != null) 
+        timer += Time.deltaTime;
+        //Debug.Log(timer);
+
+        if (player != null && timer < duration) 
 		{
 			// FIXME: Raises up spell effect so it's not below ground. Figure out how to make this so it's not neccesary
 			transform.position = new Vector3(player.transform.position.x, 1.25f, player.transform.position.z);

@@ -8,7 +8,6 @@ public class PlayerMagic : MonoBehaviour
 	public AreaEffect concussiveBlast;
 	public AreaEffect iceBurst;
 	public WizardShield wizardShield;
-	public Teleport teleport;
 	public GameObject staffEnd;
 
     public float iceBurstDuration = 2;
@@ -29,12 +28,27 @@ public class PlayerMagic : MonoBehaviour
 
 	public void CastWizardShieldSpell()
 	{
-		Instantiate (wizardShield, transform.position, Quaternion.identity);
-	}
+        GameObject[] shields = GameObject.FindGameObjectsWithTag("WizardShield");
+
+        // If there is no Wizard shield in the scene, create one around the player.
+        if (shields.Length == 0)
+        {
+            Instantiate (wizardShield, transform.position, Quaternion.identity);
+        }
+
+        // If there is a Wizard Shield already in the scene reset it's timer. 
+        else if (shields.Length == 1)
+        {
+            shields[0].GetComponent<WizardShield>().timer = 0;
+        }
+    }
 
 	public void CastTeleportSpell()
 	{
-		//Instantiate (teleport, transform.position, Quaternion.identity);
+		// TODO: Instiatate Teleport
+        // TODO: Start timeout timer 5 seconds
+        // TODO: If user presses the screen within 5 seconds the player teleports
+        // TODO: If not, nothing happens.
 	}
 
 	public void CastIceBurstSpell()
