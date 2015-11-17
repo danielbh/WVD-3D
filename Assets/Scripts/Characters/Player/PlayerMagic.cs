@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Player))]
-public class PlayerMagic : MonoBehaviour 
+public class PlayerMagic : MonoBehaviour
 {
-	public Projectile primarySpell;
-	public AreaEffect concussiveBlast;
-	public AreaEffect iceBurst;
-	public WizardShield wizardShield;
-	public GameObject staffEnd;
+    public Projectile primarySpell;
+    public AreaEffect concussiveBlast;
+    public AreaEffect iceBurst;
+    public WizardShield wizardShield;
+    public GameObject staffEnd;
     public float spellTimeOut = 5;
     public float iceBurstDuration = 2;
 
@@ -15,13 +15,11 @@ public class PlayerMagic : MonoBehaviour
     TouchStick[] touchSticks;
     bool teleporting;
     float timer;
-    Camera camera; // To interpret position of a new teleport location.
 
     void OnEnable()
     {
         touchController = GetComponent<Player>().touchController;
         touchSticks = touchController.sticks;
-        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
     void Update()
@@ -32,28 +30,28 @@ public class PlayerMagic : MonoBehaviour
         }
     }
 
-	public void CastPrimarySpell(Vector3 dir) 
-	{
-		Projectile spell = Instantiate(primarySpell, staffEnd.transform.position, Quaternion.identity) as Projectile; 
-		spell.Shoot(dir);
-	}
+    public void CastPrimarySpell(Vector3 dir)
+    {
+        Projectile spell = Instantiate(primarySpell, staffEnd.transform.position, Quaternion.identity) as Projectile;
+        spell.Shoot(dir);
+    }
 
-	public void CastConcussiveBlastSpell() 
-	{
-		Vector3 pos = new Vector3(transform.position.x , 1.25f, transform.position.z);
-		AreaEffect spell = Instantiate(concussiveBlast, pos, Quaternion.identity) as AreaEffect;
+    public void CastConcussiveBlastSpell()
+    {
+        Vector3 pos = new Vector3(transform.position.x, 1.25f, transform.position.z);
+        AreaEffect spell = Instantiate(concussiveBlast, pos, Quaternion.identity) as AreaEffect;
 
-		spell.Explode();
-	}
+        spell.Explode();
+    }
 
-	public void CastWizardShieldSpell()
-	{
+    public void CastWizardShieldSpell()
+    {
         GameObject[] shields = GameObject.FindGameObjectsWithTag("WizardShield");
 
         // If there is no Wizard shield in the scene, create one around the player.
         if (shields.Length == 0)
         {
-            Instantiate (wizardShield, transform.position, Quaternion.identity);
+            Instantiate(wizardShield, transform.position, Quaternion.identity);
         }
 
         // If there is a Wizard Shield already in the scene reset it's timer. 
@@ -63,23 +61,23 @@ public class PlayerMagic : MonoBehaviour
         }
     }
 
-	public void CastTeleportSpell()
-	{
+    public void CastTeleportSpell()
+    {
         EnableTeleportationMode();
-	}
+    }
 
-	public void CastIceBurstSpell()
-	{
-		Vector3 pos = new Vector3(transform.position.x , 1.25f, transform.position.z);
-		AreaEffect spell = Instantiate (iceBurst, pos, Quaternion.identity) as AreaEffect;
+    public void CastIceBurstSpell()
+    {
+        Vector3 pos = new Vector3(transform.position.x, 1.25f, transform.position.z);
+        AreaEffect spell = Instantiate(iceBurst, pos, Quaternion.identity) as AreaEffect;
 
         spell.Imobilize(iceBurstDuration);
-	}
+    }
 
-	public void CastMeteorShowerSpell()
-	{
+    public void CastMeteorShowerSpell()
+    {
 
-	}
+    }
 
     void ManageTeleport()
     {
@@ -89,15 +87,36 @@ public class PlayerMagic : MonoBehaviour
         if (timer > spellTimeOut)
         {
             DisableTeleportationMode();
+            Debug.Log("Teleport timed out.");
         }
 
         if (touchController.touchZones[0].JustUniReleased())
         {
-            // FIXME: Doesn't teleport to location as expected
-            Vector3 worldPos = camera.ScreenToWorldPoint(touchController.touchZones[0].GetReleasedUniStartPos());
-            gameObject.transform.position = new Vector3(worldPos.z, 0, worldPos.x);
+            Vector3 touchPos = touchController.touchZones[0].GetReleasedUniStartPos();
+
+            Teleport(touchPos);
 
             DisableTeleportationMode();
+        }
+    }
+
+    // Using local pos variable makes this function testable
+    public void Teleport(Vector3 pos)
+    {
+        print("touchPos: " + pos);
+
+        Ray ray = Camera.main.ScreenPointToRay(pos);
+        RaycastHit hit;
+
+        //MeshCollider floor = GameObject.Find("Floor").GetComponent<MeshCollider>();
+
+        if (Physics.Raycast(ray, out hit, 13))
+        {
+            transform.position = new Vector3(hit.point.x, 0 , hit.point.z);
+
+            //print("worldPos: " + transform.position);
+
+            //hit.collider.GetComponent<Renderer>().material.color = Color.red;
         }
     }
 
