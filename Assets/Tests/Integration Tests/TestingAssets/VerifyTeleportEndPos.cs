@@ -2,32 +2,24 @@
 using System.Collections;
 
 public class VerifyTeleportEndPos : MonoBehaviour {
-    public Vector2 firstInputPosition;
-    public Vector3 firstOutputPosition;
-    public Vector2 secondInputPosition;
-    public Vector3 secondOutputPosition;
+    public Vector2 screenInputPosition;
+    public Vector3 worldOutputPosition;
 
     void Start()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        player.GetComponent<PlayerMagic>().Teleport(firstInputPosition);
+        player.GetComponent<PlayerMagic>().Teleport(screenInputPosition);
 
-        //if(player.transform.position != firstOutputPosition)
-        //{
-        //    IntegrationTest.Fail();
-        //}
+        float dist = Vector3.Distance(player.transform.position, worldOutputPosition);
 
-        player.GetComponent<PlayerMagic>().Teleport(secondInputPosition);
-
-        //if (player.transform.position == secondOutputPosition)
-        //{
-        //    IntegrationTest.Pass();
-        //}
-        //else
-        //{
-        //    IntegrationTest.Fail();
-        //}
-
+        if (dist < 0.001f)
+        {
+            IntegrationTest.Pass();
+        }
+        else
+        {
+            IntegrationTest.Fail();
+        }
     }
 }
