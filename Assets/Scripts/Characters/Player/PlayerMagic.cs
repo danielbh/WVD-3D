@@ -92,31 +92,26 @@ public class PlayerMagic : MonoBehaviour
 
         if (touchController.touchZones[0].JustUniReleased())
         {
-            Vector3 touchPos = touchController.touchZones[0].GetReleasedUniStartPos();
-
-            Teleport(touchPos);
-
+            // Works for touch screens too supposedly
+            Teleport(Input.mousePosition);
             DisableTeleportationMode();
         }
     }
 
     // Using local pos variable makes this function testable
-    public void Teleport(Vector3 pos)
+    public void Teleport(Vector2 pos)
     {
-        print("touchPos: " + pos);
+        print("Teleporting from: " + pos);
 
         Ray ray = Camera.main.ScreenPointToRay(pos);
         RaycastHit hit;
 
-        //MeshCollider floor = GameObject.Find("Floor").GetComponent<MeshCollider>();
-
-        if (Physics.Raycast(ray, out hit, 13))
+        if (Physics.Raycast(ray, out hit))
         {
-            transform.position = new Vector3(hit.point.x, 0 , hit.point.z);
+            // a position where y is ALWAYS zero.
+            transform.position = new Vector3(hit.point.x, 0, hit.point.z);
 
-            //print("worldPos: " + transform.position);
-
-            //hit.collider.GetComponent<Renderer>().material.color = Color.red;
+            print("Teleporting to: " + hit.point);
         }
     }
 
