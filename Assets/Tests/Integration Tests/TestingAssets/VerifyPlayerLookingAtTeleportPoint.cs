@@ -18,7 +18,7 @@ public class VerifyPlayerLookingAtTeleportPoint : MonoBehaviour {
 
         if (Quaternion.Angle(player.transform.rotation, testObj.transform.rotation) == 0)
         {
-
+            Destroy(testObj);
             IntegrationTest.Pass();
         }
         else

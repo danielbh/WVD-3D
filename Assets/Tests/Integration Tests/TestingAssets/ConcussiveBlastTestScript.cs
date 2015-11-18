@@ -5,6 +5,7 @@ using System;
 public class ConcussiveBlastTestScript : NCMonoBehaviour 
 {
 	GameObject player;
+    GameObject enemy; 
 	public float castInterval = 0.5f;
     public float delayToCast = 0.5f;
 	public int timesCast = 3;
@@ -12,6 +13,8 @@ public class ConcussiveBlastTestScript : NCMonoBehaviour
 	void Start () 
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
+
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
 
         if (delayToCast != 0)
         {
@@ -23,6 +26,13 @@ public class ConcussiveBlastTestScript : NCMonoBehaviour
         }
 	}
 
+    void Update()
+    {
+        if (enemy != null)
+        {
+            player.transform.position = enemy.transform.position;
+        }
+    }
     void StartCastCoroutine()
     {
         StartCoroutine(InvokeMethod(Cast, castInterval, timesCast));

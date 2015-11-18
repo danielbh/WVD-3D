@@ -101,15 +101,23 @@ public class PlayerMagic : MonoBehaviour
     // Using local pos variable makes this function testable
     public void Teleport(Vector2 pos)
     {
+        print("Screen presss point: " + pos);
+
         Ray ray = Camera.main.ScreenPointToRay(pos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        Collider floor = GameObject.Find("Floor").GetComponent<MeshCollider>();
+
+        if (floor.Raycast(ray, out hit, Mathf.Infinity))
         {
-            transform.LookAt(hit.point);
+            Vector3 newPos = new Vector3(hit.point.x, 0, hit.point.z);
+            
+            transform.LookAt(newPos);
 
             // a position where y is ALWAYS zero.
-            transform.position = new Vector3(hit.point.x, 0, hit.point.z);
+            transform.position = newPos;
+
+            print("Teleported to: " + transform.position);
         }
     }
 
